@@ -49,6 +49,7 @@ function Brite () as Object
 
                     m._defineIdGetter(instance, id)
                     m._defineTypeGetter(instance, type)
+                    m._defineDispose(instance)
                 end if
 
                 return instance
@@ -69,7 +70,11 @@ function Brite () as Object
                     BriteDebug().triggerError(BriteErrors().BRITE_DESTROY_ERROR_ID_NOT_DEFINED)
                 else
                     deleted = m._brites.delete(instance.getBriteId())
-                    if deleted then m._briteTypes[instance.getBriteType()].objectCount--
+                    if deleted
+                        BriteDispatchLibrary().clear(instance.getBriteId())
+                        instance.disposeBrite()
+                        m._briteTypes[instance.getBriteType()].objectCount--
+                    end if
                 end if
 
                 return deleted
@@ -144,6 +149,12 @@ function Brite () as Object
 
             _defineTypeGetter: function (instance as Object, type as String) as Void
                 eval("instance.getBriteType = function () as String" + chr(10) + "return " + chr(42) + type + chr(42) + chr(10) + "end function")
+            end function
+
+            _defineDispose: function (instance as Object) as Void
+                instance.disposeBrite = function () as Void
+                    if IsFunction(m._dispose) then m._dispose()
+                end function
             end function
         }
 
