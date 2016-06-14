@@ -1,0 +1,29 @@
+{
+    "name": "brite.brs",
+    "homepage": "https://github.com/jlourenc/brite.brs",
+    "authors": [
+        "Jérémy Lourenço <https://github.com/jlourenc>"
+    ],
+    "description": "A brite toolkit",
+    "main": "source/brite.brs",
+    "moduleType": [
+        "globals"
+    ],
+    "devDependencies": {
+        "brs-test": "git@github.com:MarkRoddy/brstest.git#a6d6f3a6c5b1f7fb145cdab91fbc484a4fa87e83",
+        "roku-brstestrunner": "git@github.com:sky-uk/roku-brstestrunner.git#v1.0"
+    },
+    "ignore": [
+        "*",
+        "!source/",
+        "!source/*",
+        "!source/**/*",
+        "!source/**/**/*"
+    ],
+    "keywords": [
+        "BrightScript",
+        "Roku",
+        "Toolkit"
+    ],
+    "license": "MIT"
+}

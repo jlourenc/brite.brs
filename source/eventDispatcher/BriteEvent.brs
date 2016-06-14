@@ -2,9 +2,19 @@
 '/// Brite Event ///
 '///////////////////
 '
-' @author Jérémy Lourenço <https://github.com/jlourenc>
+'BriteEvent is the object dispatched by a BriteEventDispatcher on dispatch.
+'It wraps the event type and payload, which are accessible through its API.
 '
-function BriteEvent (type as String, payload as Dynamic) as Object
+'@author: Jérémy Lourenço <https://github.com/jlourenc>
+'
+'@param {String} t - the event type
+'@param {Dynamic} p - the event payload
+'
+'@return {Object} BriteEvent
+'
+'@see BriteEventDispatcher
+'
+function BriteEvent (t as String, p as Dynamic) as Object
 
     return {
 
@@ -12,10 +22,19 @@ function BriteEvent (type as String, payload as Dynamic) as Object
         '/// PUBLIC API ///
         '//////////////////
 
+        'Gets the event type.
+        '
+        '@return {String} eventType
+        '
         getType: function () as String
             return m._type
         end function
 
+
+        'Gets the event payload.
+        '
+        '@return {Dynamic} eventPayload
+        '
         getPayload: function () as Dynamic
             return m._payload
         end function
@@ -25,8 +44,8 @@ function BriteEvent (type as String, payload as Dynamic) as Object
         '/// PRIVATE PROPERTIES ///
         '//////////////////////////
 
-        _type: type
-        _payload: payload
+        _type: t
+        _payload: p
     }
 
 end function

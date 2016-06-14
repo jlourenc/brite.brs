@@ -14,37 +14,50 @@ function BriteDispatchLibrary () as Object
             '/// PUBLIC API ///
             '//////////////////
 
-            add: function (listenerId as String, dispatcherId as String) as Void
-                dispatchers = m._dispatchersByListeners[listenerId]
+            add: function (dispatcherId as String, eventType as String, listenerId as String, handlerName as String) as Void
+                dispatchers = m._dispatchersByListeners.lookup(listenerId)
                 if dispatchers = Invalid
-                    m._dispatchersByListeners[listenerId] = {}
-                    m._dispatchersByListeners[listenerId][dispatcherId] = 1
-                else if dispatchers.doesExist(dispatcherId)
-                    dispatchers[dispatcherId]++
-                else
-                    dispatchers[dispatcherId] = 1
+                    dispatchers = {}
+                    m._dispatchersByListeners.addReplace(listenerId, dispatchers)
                 end if
+
+                dispatcher = dispatchers.lookup(dispatcherId)
+                if dispatcher = Invalid
+                    dispatcher = {}
+                    dispatchers.addReplace(dispatcherId, dispatcher)
+                end if
+
+                dispatcher.addReplace(eventType + ":" + handlerName, Invalid)
             end function
 
 
-            delete: function (listenerId as String, dispatcherId as String) as Void
-                dispatchers = m._dispatchersByListeners[listenerId]
-                if dispatchers <> Invalid and dispatchers.doesExist(dispatcherId)
-                    if dispatchers[dispatcherId] > 1
-                        dispatchers[dispatcherId]--
-                    else
-                        dispatchers.delete(dispatcherId)
-                        if dispatchers.count() = 0 then m._dispatchersByListeners.delete(listenerId)
+            remove: function (dispatcherId as String, eventType as String, listenerId as String, handlerName as String) as Void
+                dispatchers = m._dispatchersByListeners.lookup(listenerId)
+                if dispatchers <> Invalid
+                    dispatcher = dispatchers.lookup(dispatcherId)
+                    if dispatcher <> Invalid
+                        dispatcher.delete(eventType + ":" + handlerName)
+                        if dispatcher.count() = 0
+                            dispatchers.delete(dispatcherId)
+                            if dispatchers.count() = 0
+                                m._dispatchersByListeners.delete(listenerId)
+                            end if
+                        end if
                     end if
                 end if
             end function
 
 
-            clear: function (listenerId as String) as Void
-                dispatchers = m._dispatchersByListeners[listenerId]
+            clear: function (listener as String) as Void
+                dispatchers = m._dispatchersByListeners[listener.getBriteId()]
                 if dispatchers <> Invalid
                     for each dispatcherId in dispatchers
-                        find(dispatcherId).removeAllEventListenersFromContext(listenerId)
+                        dispatcher = find(dispatcherId)
+                        dispatches = dispatchers[dispatcherId]
+                        for each dispatchId in dispatches
+                            dispatch = dispatchId.split(":")
+                            dispatcher.removeEventListener(dispatch[0], listener, dispatch[1])
+                        end for
                     end for
                 end if
             end function

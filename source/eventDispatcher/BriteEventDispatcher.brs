@@ -24,7 +24,7 @@ function BriteEventDispatcher () as Object
             end if
 
             listeners.addReplace(brite.getBriteId() + ":" + handlerName, 0)
-            BriteDispatchLibrary().add(brite.getBriteId(), m.getBriteId())
+            BriteDispatchLibrary().add(m.getBriteId(), eventType, brite.getBriteId(), handlerName)
         end function
 
 
@@ -32,7 +32,7 @@ function BriteEventDispatcher () as Object
             listeners = m._listeners.lookup(eventType)
             if listeners <> Invalid and listeners.delete(brite.getBriteId() + ":" + handlerName) and listeners.count() = 0
                 m._listeners.delete(eventType)
-                BriteDispatchLibrary().delete(brite.getBriteId(), m.getBriteId())
+                BriteDispatchLibrary().remove(m.getBriteId(), eventType, brite.getBriteId(), handlerName)
             end if
         end function
 

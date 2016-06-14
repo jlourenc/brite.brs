@@ -6,9 +6,9 @@
 '
 function BriteErrors () as Object
 
-    if not m.doesExist("_briteErrors")
+    if not m.doesExist("briteErrors")
 
-        m._briteErrors = {
+        m.briteErrors = {
 
             '//////////////////
             '/// PUBLIC API ///
@@ -23,6 +23,6 @@ function BriteErrors () as Object
 
     end if
 
-    return m._briteErrors
+    return m.briteErrors
 
 end function

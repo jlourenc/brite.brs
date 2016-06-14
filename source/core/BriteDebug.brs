@@ -6,9 +6,9 @@
 '
 function BriteDebug () as Object
 
-    if not m.doesExist("_briteDebug")
+    if not m.doesExist("briteDebug")
 
-        m._briteDebug = {
+        m.briteDebug = {
 
             '//////////////////
             '/// PUBLIC API ///
@@ -21,6 +21,6 @@ function BriteDebug () as Object
 
     end if
 
-    return m._briteDebug
+    return m.briteDebug
 
 end function

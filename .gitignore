@@ -1,6 +1,7 @@
 ### Project specific ###
-out/*
-build/*
+out
+build
+libs
 
 # Created by https://www.gitignore.io/api/osx,linux,windows,eclipse,sublimetext,visualstudio,visualstudiocode
 

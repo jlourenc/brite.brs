@@ -42,13 +42,13 @@ function Brite () as Object
                         instance.append(inheritance.pop())
                     end while
 
-                    type = instance[m._KEYWORD.BRITE][m._KEYWORD.EXTENDS]
+                    bType = instance[m._KEYWORD.BRITE][m._KEYWORD.EXTENDS]
                     instance.delete(m._KEYWORD.BRITE)
 
-                    id = m._registerBrite(type)
+                    bId = m._registerBrite(bType)
 
-                    m._defineIdGetter(instance, id)
-                    m._defineTypeGetter(instance, type)
+                    m._defineIdGetter(instance, bId)
+                    m._defineTypeGetter(instance, bType)
                     m._defineDispose(instance)
                 end if
 
@@ -66,7 +66,7 @@ function Brite () as Object
 
                 if not IsAssociativeArray(instance)
                     BriteDebug().triggerError(BriteErrors().BRITE_ERROR_NOT_AN_ASSOCIATIVE_ARRAY)
-                else if not IsFunction(instance.getBriteId) or not IsFunction(instance.getBriteType
+                else if not IsFunction(instance.getBriteId) or not IsFunction(instance.getBriteType)
                     BriteDebug().triggerError(BriteErrors().BRITE_DESTROY_ERROR_ID_NOT_DEFINED)
                 else
                     deleted = m._brites.delete(instance.getBriteId())
@@ -126,29 +126,29 @@ function Brite () as Object
                 return briteDef
             end function
 
-            _registerBrite: function (type as String) as String
-                briteType = m._briteTypes[type]
+            _registerBrite: function (bType as String) as String
+                briteType = m._briteTypes[bType]
 
                 if briteType = Invalid
                     briteType = {idCount: 1, objectCount: 1}
-                    m._briteTypes[type] = briteType
+                    m._briteTypes[bType] = briteType
                 else
                     briteType.idCount++
                     briteType.objectCount++
                 end if
 
-                id = type + (briteType.idCount).toStr()
-                m._brites[id] = brite
+                bId = bType + (briteType.idCount).toStr()
+                m._brites[bId] = brite
 
                 return id
-            end if
-
-            _defineIdGetter: function (instance as Object, id as String) as Void
-                eval("instance.getBriteId = function () as String" + chr(10) + "return " + chr(42) + id + chr(42) + chr(10) + "end function")
             end function
 
-            _defineTypeGetter: function (instance as Object, type as String) as Void
-                eval("instance.getBriteType = function () as String" + chr(10) + "return " + chr(42) + type + chr(42) + chr(10) + "end function")
+            _defineIdGetter: function (instance as Object, bId as String) as Void
+                eval("instance.getBriteId = function () as String" + chr(10) + "return " + chr(42) + bId + chr(42) + chr(10) + "end function")
+            end function
+
+            _defineTypeGetter: function (instance as Object, bType as String) as Void
+                eval("instance.getBriteType = function () as String" + chr(10) + "return " + chr(42) + bType + chr(42) + chr(10) + "end function")
             end function
 
             _defineDispose: function (instance as Object) as Void
