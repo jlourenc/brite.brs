@@ -27,8 +27,9 @@ function BriteErrors () as Object
                 DISPATCH_LISTENER_UNDEFINED: "Listener undefined. Can't dispatch"
             }
 
-            BRITE_DEBUG: {
+            BRITE_LOGGER: {
                 UNKNOWN_DEBUG_LEVEL: "Unknown debug level."
+                INVALID_ARGUMENTS: "Invalid arguments."
             }
         }
 

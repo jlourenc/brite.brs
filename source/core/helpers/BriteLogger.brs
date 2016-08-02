@@ -27,28 +27,36 @@ function BriteLogger () as Object
                 if (level >= m.LEVEL.OFF AND level <= m.LEVEL.ALL)
                     m._level = level
                 else
-                    m.warning("BriteLogger", BriteErrors().BRITE_DEBUG.UNKNOWN_DEBUG_LEVEL)
+                    m.warning("BriteLogger", BriteErrors().BRITE_LOGGER.UNKNOWN_DEBUG_LEVEL)
                 end if
             end function
 
 
-            error: function (tag as String, message as String) as Void
-                if (m._level >= m.LEVEL.ERROR) then m._log(tag, message, m._DECORATION.ERROR)
+            error: function (tag as String, message as String, args = [] as Object) as Void
+                if (m._level >= m.LEVEL.ERROR)
+                    m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.ERROR))
+                end if
             end function
 
 
-            warning: function (tag as String, message as String) as Void
-                if (m._level >= m.LEVEL.WARNING) then m._log(tag, message, m._DECORATION.WARNING)
+            warning: function (tag as String, message as String, args = [] as Object) as Void
+                if (m._level >= m.LEVEL.WARNING)
+                    m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.WARNING))
+                end if
             end function
 
 
-            info: function (tag as String, message as String) as Void
-                if (m._level >= m.LEVEL.INFO) then m._log(tag, message, m._DECORATION.INFO)
+            info: function (tag as String, message as String, args = [] as Object) as Void
+                if (m._level >= m.LEVEL.INFO)
+                    m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.INFO))
+                end if
             end function
 
 
-            debug: function (tag as String, message as String) as Void
-                if (m._level >= m.LEVEL.ALL) then m._log(tag, message, m._DECORATION.DEBUG)
+            debug: function (tag as String, message as String, args = [] as Object) as Void
+                if (m._level >= m.LEVEL.ALL)
+                    m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.DEBUG))
+                end if
             end function
 
 
@@ -98,8 +106,8 @@ function BriteLogger () as Object
             end function
 
 
-            _log: function (component as String, message as String, decoration as Object) as Void
-                print m._getTimestamp() + " " + decoration.COLOUR.replace("%s", "[" + component + "]") + " " + message + " " decoration.COLOUR.replace("%s", decoration.DESCRIPTION) + " " + m._getTimespan()
+            _log: function (log as String) as Void
+                m._print(m._getTimestamp() + " " + log + " " + m._getTimespan())
             end function
 
 
@@ -120,8 +128,58 @@ function BriteLogger () as Object
             end function
 
 
+            _formatLog: function (tag as String, message as String, decoration as Object) as String
+                return decoration.COLOUR.replace("%s", "[" + tag + "]") + " " + message + " " + decoration.COLOUR.replace("%s", decoration.DESCRIPTION)
+            end function
+
+
+            _formatMessage: function (message as String, args as Object) as String
+                if IsArray(args)
+                    for i=0 to args.count()-1
+                        message = message.replace("{" + i.toStr() + "}", m._formatArgument(args[i]))
+                    end for
+                else
+                    m.error("BriteLogger", BriteErrors().BRITE_LOGGER.INVALID_ARGUMENTS)
+                end if
+
+                return message
+            end function
+
+
+            _formatArgument: function (arg as Object) as String
+                if IsAssociativeArray(arg)
+                    formattedArgument = "{"
+                    if arg.count() > 0
+                        for each argId in arg
+                            formattedArgument = formattedArgument + argId.toStr() + ":" + m._formatArgument(arg[argId]) + ","
+                        end for
+                        formattedArgument = Left(formattedArgument, formattedArgument.len()-1)
+                    end if
+                    formattedArgument = formattedArgument + "}"
+                else if IsArray(arg)
+                    formattedArgument = "["
+                    if arg.count() > 0
+                        for each argItem in arg
+                            formattedArgument = formattedArgument + m._formatArgument(argItem) + ","
+                        end for
+                        formattedArgument = Left(formattedArgument, formattedArgument.len()-1)
+                    end if
+                    formattedArgument = formattedArgument + "]"
+                else
+                    formattedArgument = arg.toStr()
+                end if
+
+                return formattedArgument
+            end function
+
+
             _formatMilliseconds: function (milliseconds as Integer) as String
                 return Right("00" + milliseconds.toStr(), 3)
+            end function
+
+
+            _print: function (log as String) as Void
+                print log
             end function
 
         }._init()
