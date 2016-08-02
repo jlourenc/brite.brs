@@ -9,9 +9,9 @@
 '
 function Brite () as Object
 
-    if not m.doesExist("brite")
+    if IsInvalid(m.Brite)
 
-        m.brite = {
+        m.Brite = {
 
             '//////////////////
             '/// PUBLIC API ///
@@ -163,6 +163,6 @@ function Brite () as Object
 
     end if
 
-    return m.brite
+    return m.Brite
 
 end function

@@ -6,7 +6,7 @@
 '
 function BriteLogger () as Object
 
-    if not m.doesExist("BriteLogger")
+    if IsInvalid(m.BriteLogger)
 
         m.BriteLogger = {
 
@@ -60,6 +60,14 @@ function BriteLogger () as Object
             end function
 
 
+            dispose: function () as Void
+                m._dateTime = Invalid
+                m._timespan = Invalid
+
+                GetGlobalAA().BriteLogger = Invalid
+            end function
+
+
             '///////////////////////
             '/// PRIVATE MEMBERS ///
             '///////////////////////
@@ -97,10 +105,8 @@ function BriteLogger () as Object
 
             _init: function () as Object
                 m._level = m.LEVEL.OFF
-
                 m._dateTime = CreateObject("roDateTime")
                 m._timespan = CreateObject("roTimespan")
-                m._timespan.mark()
 
                 return m
             end function

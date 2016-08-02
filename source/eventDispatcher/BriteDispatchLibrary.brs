@@ -6,9 +6,9 @@
 '
 function BriteDispatchLibrary () as Object
 
-    if not m.doesExist("briteDispatchLibrary")
+    if IsInvalid(m.BriteDispatchLibrary)
 
-        m.briteDispatchLibrary = {
+        m.BriteDispatchLibrary = {
 
             '//////////////////
             '/// PUBLIC API ///
@@ -73,6 +73,6 @@ function BriteDispatchLibrary () as Object
 
     end if
 
-    return m.briteDispatchLibrary
+    return m.BriteDispatchLibrary
 
 end function
