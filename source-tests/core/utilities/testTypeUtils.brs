@@ -19,6 +19,20 @@ sub testTypeUtils_IsBooleanWithInvalid (t as Object)
     t.assertFalse(IsBoolean(Invalid))
 end sub
 
+'IsInvalid'
+
+sub testTypeUtils_IsInvalidWithInvalid (t as Object)
+    t.assertTrue(IsInvalid(Invalid))
+end sub
+
+sub testTypeUtils_IsBooleanWithRoInvalid (t as Object)
+    t.assertTrue(IsInvalid(CreateObject("roInvalid")))
+end sub
+
+sub testTypeUtils_IsInvalidWithBoolean (t as Object)
+    t.assertFalse(IsInvalid(true))
+end sub
+
 
 'IsString'
 

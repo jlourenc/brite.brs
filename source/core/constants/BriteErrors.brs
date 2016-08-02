@@ -19,6 +19,17 @@ function BriteErrors () as Object
             BRITE_ERROR_BRITE_SECTION_NOT_DEFINED: "No brite section defined. Can't be handled."
             BRITE_ERROR_NOT_AN_ASSOCIATIVE_ARRAY: "This instance is not an associative array. Can't be handled."
             BRITE_ERROR_TYPE_NOT_DEFINED: "No type defined. Can't be handled."
+
+            BRITE_EVENT_DISPATCHER: {
+                EVENT_LISTENER_ALREADY_DEFINED: "This event listener is already defined. Can't add."
+                EVENT_LISTENER_NOT_DEFINED: "This event listener has not been defined. Can't remove."
+                DISPATCH_NO_EVENT_LISTENER_DEFINED: "No event listener defined for this event. Can't dispatch."
+                DISPATCH_LISTENER_UNDEFINED: "Listener undefined. Can't dispatch"
+            }
+
+            BRITE_DEBUG: {
+                UNKNOWN_DEBUG_LEVEL: "Unknown debug level."
+            }
         }
 
     end if

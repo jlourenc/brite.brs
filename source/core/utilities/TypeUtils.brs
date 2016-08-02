@@ -7,6 +7,15 @@ function IsBoolean (var as Object) as Boolean
 end function
 
 
+' Check the variable type against the type Invalid
+' @param {Object} var - variable for which the type is checked
+' @return {Boolean} isInvalid - whether the variable is a Boolean
+'
+function IsInvalid (var as Object) as Boolean
+    return type(var, 3) = "roInvalid"
+end function
+
+
 ' Check the variable type against the type String
 ' @param {Object} var - variable for which the type is checked
 ' @return {Boolean} isString - whether the variable is of a String
