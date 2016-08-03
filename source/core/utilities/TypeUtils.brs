@@ -1,3 +1,13 @@
+'//////////////////
+'/// Type Utils ///
+'//////////////////
+'
+' @author Jérémy Lourenço <https://github.com/jlourenc>
+'
+' Utils to check variables types
+'
+
+
 ' Check the variable type against the type Boolean
 ' @param {Object} var - variable for which the type is checked
 ' @return {Boolean} isBoolean - whether the variable is a Boolean

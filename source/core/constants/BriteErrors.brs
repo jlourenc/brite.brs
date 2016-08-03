@@ -29,7 +29,6 @@ function BriteErrors () as Object
 
             BRITE_LOGGER: {
                 UNKNOWN_DEBUG_LEVEL: "Unknown debug level."
-                INVALID_ARGUMENTS: "Invalid arguments."
             }
         }
 

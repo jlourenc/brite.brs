@@ -3,6 +3,29 @@
 '////////////////////
 '
 ' @author Jérémy Lourenço <https://github.com/jlourenc>
+
+' Implementation of a logger singleton.
+' This logger logs a timestamp for each log and a time span between the current log
+' and the previous log. e.g. '[2016-08-03T15:41:50.145] [Tag] This is an error message [ERROR] [+0.123]'
+' It also implements coloration/decoration to identify log levels, using ANSI escape colour codes.
+'
+' @usage
+'    BriteLogger().error("Tag", "Simple Message")
+'    BriteLogger().warning("Tag", "Message with {0} param", 1)
+'    BriteLogger().info("Tag", "Message with {0} params: {1} & {2}", ["multiple", Invalid, aFunction])
+'    BriteLogger().debug("Tag", "Message with {0} embedded params: {1} & {2}", ["multiple", {fooId:1,list:[{}]}, [{}, true]])
+'
+' Levels:
+'    0 = OFF
+'    1 = Error
+'    2 = Error & warning
+'    3 = Error & warning & info
+'    4 = Error & warning & info & debug
+'
+
+'
+' @return {BriteLogger} singleton - the BriteLogger singleton
+'
 '
 function BriteLogger () as Object
 
@@ -22,7 +45,10 @@ function BriteLogger () as Object
                 ALL: 4
             }
 
-
+            ' Sets logs level
+            '
+            ' @param {Integer} level - a log level
+            '
             setLevel: function (level as Integer) as Void
                 if (level >= m.LEVEL.OFF AND level <= m.LEVEL.ALL)
                     m._level = level
@@ -32,6 +58,12 @@ function BriteLogger () as Object
             end function
 
 
+            ' Logs an error level message
+            '
+            ' @param {String} tag - a tag name, define a component this log relates to
+            ' @param {String} message - a log message
+            ' @param {Object} args - an argument or an array of arguments, message markers are replaced by their associated argument
+            '
             error: function (tag as String, message as String, args = [] as Object) as Void
                 if (m._level >= m.LEVEL.ERROR)
                     m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.ERROR))
@@ -39,6 +71,12 @@ function BriteLogger () as Object
             end function
 
 
+            ' Logs a warning level message
+            '
+            ' @param {String} tag - a tag name, define a component this log relates to
+            ' @param {String} message - a log message
+            ' @param {Object} args - an argument or an array of arguments, message markers are replaced by their associated argument
+            '
             warning: function (tag as String, message as String, args = [] as Object) as Void
                 if (m._level >= m.LEVEL.WARNING)
                     m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.WARNING))
@@ -46,6 +84,12 @@ function BriteLogger () as Object
             end function
 
 
+            ' Logs an info level message
+            '
+            ' @param {String} tag - a tag name, define a component this log relates to
+            ' @param {String} message - a log message
+            ' @param {Object} args - an argument or an array of arguments, message markers are replaced by their associated argument
+            '
             info: function (tag as String, message as String, args = [] as Object) as Void
                 if (m._level >= m.LEVEL.INFO)
                     m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.INFO))
@@ -53,6 +97,12 @@ function BriteLogger () as Object
             end function
 
 
+            ' Logs a debug level message
+            '
+            ' @param {String} tag - a tag name, define a component this log relates to
+            ' @param {String} message - a log message
+            ' @param {Object} args - an argument or an array of arguments, message markers are replaced by their associated argument
+            '
             debug: function (tag as String, message as String, args = [] as Object) as Void
                 if (m._level >= m.LEVEL.ALL)
                     m._log(m._formatLog(tag, m._formatMessage(message, args), m._DECORATION.DEBUG))
@@ -60,6 +110,8 @@ function BriteLogger () as Object
             end function
 
 
+            ' Singleton destructor
+            '
             dispose: function () as Void
                 m._dateTime = Invalid
                 m._timespan = Invalid
@@ -127,7 +179,7 @@ function BriteLogger () as Object
 
 
             _getTimespan: function () as String
-                timespan = m._timespan.totalSeconds().toStr() + "." + m._formatMilliseconds(m._timespan.totalMilliseconds()/60)
+                timespan = m._timespan.totalSeconds().toStr() + "." + m._formatMilliseconds(m._timespan.totalMilliseconds())
                 m._timespan.mark()
 
                 return m._DECORATION.TIME.COLOUR.replace("%s", "[+" + timespan+ "]")
@@ -140,13 +192,13 @@ function BriteLogger () as Object
 
 
             _formatMessage: function (message as String, args as Object) as String
-                if IsArray(args)
-                    for i=0 to args.count()-1
-                        message = message.replace("{" + i.toStr() + "}", m._formatArgument(args[i]))
-                    end for
-                else
-                    m.error("BriteLogger", BriteErrors().BRITE_LOGGER.INVALID_ARGUMENTS)
+                if not IsArray(args)
+                    args = [args]
                 end if
+
+                for i=0 to args.count()-1
+                    message = message.replace("{" + i.toStr() + "}", m._formatArgument(args[i]))
+                end for
 
                 return message
             end function
