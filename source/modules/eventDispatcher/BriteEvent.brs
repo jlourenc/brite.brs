@@ -2,19 +2,19 @@
 '/// Brite Event ///
 '///////////////////
 '
-'BriteEvent is the object dispatched by a BriteEventDispatcher on dispatch.
+'BriteEvent is an object dispatched by a BriteEventDispatcher on dispatch.
 'It wraps the event type and payload, which are accessible through its API.
 '
 '@author: Jérémy Lourenço <https://github.com/jlourenc>
 '
 '@param {String} t - the event type
-'@param {Dynamic} p - the event payload
+'@param {Object} p - the event payload
 '
 '@return {Object} BriteEvent
 '
 '@see BriteEventDispatcher
 '
-function BriteEvent (t as String, p as Dynamic) as Object
+function BriteEvent (t as String, p as Object) as Object
 
     return {
 
@@ -33,9 +33,9 @@ function BriteEvent (t as String, p as Dynamic) as Object
 
         'Gets the event payload.
         '
-        '@return {Dynamic} eventPayload
+        '@return {Object} eventPayload
         '
-        getPayload: function () as Dynamic
+        getPayload: function () as Object
             return m._payload
         end function
 

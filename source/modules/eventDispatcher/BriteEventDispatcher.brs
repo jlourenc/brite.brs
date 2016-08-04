@@ -57,7 +57,7 @@ function BriteEventDispatcher () as Object
         '/// PRIVATE METHODS ///
         '///////////////////////
 
-        _dispatchEvent: function (eventType as String, eventPayload = Invalid as Dynamic) as Void
+        _dispatchEvent: function (eventType as String, eventPayload = Invalid as Object) as Void
             listeners = m._listeners.lookup(eventType)
 
             if IsInvalid(listeners)
