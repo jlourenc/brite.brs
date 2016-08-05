@@ -22,7 +22,6 @@
 '    3 = Error & warning & info
 '    4 = Error & warning & info & debug
 '
-
 '
 ' @return {BriteLogger} singleton - the BriteLogger singleton
 '

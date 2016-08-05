@@ -41,14 +41,14 @@ function Brite () as Object
                         instance.append(inheritance.pop())
                     end while
 
-                    bType = instance[m._KEYWORD.BRITE][m._KEYWORD.EXTENDS]
+                    bType = instance[m._KEYWORD.BRITE][m._KEYWORD.TYPE]
                     instance.delete(m._KEYWORD.BRITE)
 
-                    bId = m._registerBrite(bType)
-
+                    bId = m._registerBrite(instance, bType)
                     m._defineIdGetter(instance, bId)
                     m._defineTypeGetter(instance, bType)
-                    m._defineDispose(instance)
+
+                    m._processNewBrite(instance)
                 end if
 
                 return instance
@@ -70,9 +70,8 @@ function Brite () as Object
                 else
                     deleted = m._brites.delete(instance.getBriteId())
                     if deleted
-                        BriteDispatchLibrary().clear(instance.getBriteId())
-                        instance.disposeBrite()
                         m._briteTypes[instance.getBriteType()].objectCount = m._briteTypes[instance.getBriteType()].objectCount + 1
+                        m._processDeletedBrite(instance)
                     end if
                 end if
 
@@ -125,7 +124,7 @@ function Brite () as Object
                 return briteDef
             end function
 
-            _registerBrite: function (bType as String) as String
+            _registerBrite: function (instance as Object, bType as String) as String
                 briteType = m._briteTypes[bType]
 
                 if IsInvalid(briteType)
@@ -137,7 +136,7 @@ function Brite () as Object
                 end if
 
                 bId = bType + (briteType.idCount).toStr()
-                m._brites[bId] = brite
+                m._brites[bId] = instance
 
                 return bId
             end function
@@ -150,10 +149,20 @@ function Brite () as Object
                 eval("instance.getBriteType = function () as String" + chr(10) + "return " + chr(34) + bType + chr(34) + chr(10) + "end function")
             end function
 
+            _processNewBrite: function (instance as Object) as Void
+                m._defineDispose(instance)
+                if GetGlobalAA().BriteBugSolver <> Invalid then BriteBugSolver().fix(instance)
+            end function
+
             _defineDispose: function (instance as Object) as Void
-                instance.disposeBrite = function () as Void
-                    if IsFunction(m._dispose) then m._dispose()
-                end function
+                'instance.disposeBrite = function () as Void
+                ''    if IsFunction(m._dispose) then m._dispose()
+                'end function
+            end function
+
+            _processDeletedBrite: function (instance as Object) as Void
+                if GetGlobalAA().BriteDispatchLibrary <> Invalid then BriteDispatchLibrary().clear(instance.getBriteId())
+                'instance.disposeBrite()
             end function
 
             _error: function (message as String) as Void

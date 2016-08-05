@@ -14,6 +14,7 @@
 '
 '@see BriteEventDispatcher
 '
+'
 function BriteEvent (t as String, p as Object) as Object
 
     return {

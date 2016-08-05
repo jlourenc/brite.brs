@@ -4,6 +4,7 @@
 '
 ' @author Jérémy Lourenço <https://github.com/jlourenc>
 '
+'
 function BriteMessageBus () as Object
 
     return {

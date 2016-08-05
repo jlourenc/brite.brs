@@ -4,6 +4,7 @@
 '
 ' @author Jérémy Lourenço <https://github.com/jlourenc>
 '
+'
 function BriteDispatchLibrary () as Object
 
     if IsInvalid(m.BriteDispatchLibrary)

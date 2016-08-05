@@ -4,6 +4,7 @@
 '
 ' @author Jérémy Lourenço <https://github.com/jlourenc>
 '
+'
 function BriteEventDispatcher () as Object
 
     return {
